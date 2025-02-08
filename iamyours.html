@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine?</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #ffffff;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+        }
+        .bear-gif {
+            width: 150px;
+            height: 150px;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        #yesButton {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        #noButton {
+            background-color: #e74c3c;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        .rose {
+            position: absolute;
+            font-size: 24px;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            from { transform: translateY(-100vh); }
+            to { transform: translateY(100vh); }
+        }
+        .side-images {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .left-images { left: 5%; }
+        .right-images { right: 5%; }
+        .side-images img {
+            width: 120px;
+            height: auto;
+            border-radius: 10px;
+        }
+        .side-images img.top-left {
+            width: 200px; /* Increase this value to make the image larger */
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainContainer">
+        <img id="bearGif" class="bear-gif" src="https://media.giphy.com/media/9tZebYjE6ZhyfVpEac/giphy.gif" alt="Cute bear">
+        <h2 id="questionText">Will you be my Valentine?</h2>
+        <div class="buttons">
+            <button id="yesButton" onclick="showHappyGif()">Yes</button>
+            <button id="noButton" onclick="changeText()">Are you sure?</button>
+        </div>
+    </div>
+    
+    <audio id="valentineSong" src="https://www.mixcloud.com/penguin121212/wohh/"></audio>
+    
+    <script>
+        let noMessages = ["Are you sure?", "Think again", "Last chance", "Give it another thought", "This could be a mistake", "Is that your final answer?"];
+        let index = 0;
+        let yesButton = document.getElementById("yesButton");
+        let noButton = document.getElementById("noButton");
+        let bearGif = document.getElementById("bearGif");
+        let mainContainer = document.getElementById("mainContainer");
+        let questionText = document.getElementById("questionText");
+        let valentineSong = document.getElementById("valentineSong");
+        
+        function changeText() {
+            index = (index + 1) % noMessages.length;
+            noButton.textContent = noMessages[index];
+            increaseYesButton();
+            decreaseNoButton();
+        }
+
+        function increaseYesButton() {
+            let currentSize = parseFloat(window.getComputedStyle(yesButton).fontSize);
+            yesButton.style.fontSize = (currentSize + 5) + "px";
+        }
+        
+        function decreaseNoButton() {
+            let currentSize = parseFloat(window.getComputedStyle(noButton).fontSize);
+            noButton.style.fontSize = Math.max(10, currentSize - 2) + "px";
+        }
+        
+        function showHappyGif() {
+            mainContainer.innerHTML = `
+                <h2 style="font-size: 2em;">I knew it!</h2>
+                <img src="https://media.giphy.com/media/YxKXWOhTSq8I14NKEn/giphy.gif" style="width: 180px; height: 180px;" alt="Happy GIF">
+            `;
+            valentineSong.play();
+            startRoseRain();
+            addSideImages();
+        }
+
+        function startRoseRain() {
+            for (let i = 0; i < 300; i++) {
+                let rose = document.createElement("div");
+                rose.classList.add("rose");
+                rose.innerHTML = "💖";
+                rose.style.left = Math.random() * window.innerWidth + "px";
+                rose.style.animationDuration = (Math.random() * 3 + 2) + "s";
+                document.body.appendChild(rose);
+                setTimeout(() => { rose.remove(); }, 5000);
+            }
+        }
+        
+        function addSideImages() {
+            let leftImages = document.createElement("div");
+            leftImages.classList.add("side-images", "left-images");
+            leftImages.innerHTML = `
+                <img src="https://i.ibb.co/yFKN8mYm/56166442-1674-49c9-a810-f996d0d8f59b.jpg" alt="Image 1" class="top-left">
+                <img src="https://i.ibb.co/GvtPp5c4/b0f805fe-0fde-4827-8b5f-e9948fbc4cc8.jpg" alt="Image 2">
+            `;
+            
+            let rightImages = document.createElement("div");
+            rightImages.classList.add("side-images", "right-images");
+            rightImages.innerHTML = `
+                <img src="https://i.ibb.co/8gZZqxjS/a60fcc60-5ca7-4afe-8cf8-fa237e5af897.jpg" alt="Image 3">
+                <img src="https://i.ibb.co/2YCVdhcQ/7c427ec9-b0eb-4012-a877-c6c5400e11b2.jpg" alt="Image 4">
+            `;
+            
+            document.body.appendChild(leftImages);
+            document.body.appendChild(rightImages);
+        }
+    </script>
+</body>
+</html>
